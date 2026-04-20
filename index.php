@@ -2,7 +2,7 @@
 <html lang="es">
     <?php 
         $ruta = ".";
-        $titulo = "/Aplicacion de Ventas";
+        $titulo = "Aplicacion de Ventas";
         include("./page/includes/cabezera.php")    
     ?>
 
@@ -21,23 +21,33 @@
 
             <section>
                 <article>
-                    <div id="carouselExampleIndicators" class="carousel slide">
+                    <?php
+                        // 1. Configuración de la carpeta
+                        $dir = "./image/"; // Asegúrate de que esta sea la ruta correcta a tus fotos
+                        $imagenes = glob($dir . "{*.jpg,*.jpeg,*.png,*.webp}", GLOB_BRACE);
+                    ?>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <?php foreach($imagenes as $indice => $img): ?>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" 
+                                data-bs-slide-to="<?= $indice ?>" class="<?= $indice === 0 ? 'active' : '' ?>" 
+                                aria-current="<?= $indice === 0 ? 'true' : 'false' ?>" aria-label="Slide <?= $indice + 1 ?>">
+                            </button>
+                            <?php endforeach; ?>
                         </div>
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                            <img src="./image/machupicchu.jpg" class="d-block w-100" alt="...">
+                        <div class="carousel-inner" >
+                            <?php if (count($imagenes) > 0): ?>
+                                <?php foreach($imagenes as $indice => $img): ?>
+                            <div class="carousel-item <?= $indice === 0 ? 'active' : '' ?>">
+                            <img src="<?=  $img ?>" class="d-block w-100" alt="..." style="max-height: 100vh; object-fit: cover; padding: 20px">
                             </div>
-                            <div class="carousel-item">
-                            <img src="..." class="d-block w-100" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                            <img src="..." class="d-block w-100" alt="...">
-                            </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                         </div>
+                        <div class="carousel-item active">
+                                <p class="text-center">No se encontraron imágenes en la carpeta.</p>
+                        </div>
+                        <?php endif; ?>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
