@@ -43,55 +43,59 @@
         }
 
         public function FiltrarProducto($valor) {
-            $arr_prod = null;
             $cn = $this->Conectar();
-            $sql = "call sp_filtrar_producto(:valor)";
+            $sql = "call sp_filtrar_por_nombre(:valor)";
             $snt = $cn->prepare($sql);
             $snt->bindParam(":valor", $valor, PDO::PARAM_STR, 40);
             $snt->execute();
             $arr_prod = $snt->fetchAll(PDO::FETCH_OBJ);
             $nr = $snt->rowCount();
+
             if ($nr > 0) {
-                echo "<table class='table table-hover table-sm table-success table-striped'>";
-                echo "<tr class='table-primary'>";
+                echo "<table class='table table-hover table-sm table-striped shadow-sm'>";
+                echo "<thead class='table-primary'>"; // Usar thead para mejor estructura
+                echo "<tr>";
                 echo "<th>N°</th>";
                 echo "<th>Código</th>";
                 echo "<th>Producto</th>";
-                echo "<th>Stock Disponible</th>";
+                echo "<th class='text-center'>Stock</th>";
                 echo "<th>Costo</th>";
-                echo "<th>% Ganancia</th>";
+                echo "<th class='text-center'>% Ganancia</th>";
                 echo "<th>Precio</th>";
                 echo "<th>Marca</th>";
-                echo "<th>Categoria</th>";
+                echo "<th>Categoría</th>";
                 echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
 
-                $i = 0; // Contador del número de registros
-
+                $i = 0;
                 foreach ($arr_prod as $prod) {
                     $i++;
+                    // Formateamos los valores numéricos
+                    $costo_f = number_format($prod->costo, 2, '.', ',');
+                    $ganancia_f = ($prod->ganancia * 100) . "%";
+                    $precio_f = number_format($prod->precio, 2, '.', ',');
 
                     echo "<tr>";
                     echo "<td>" . $i . "</td>";
-                    echo "<td>" . $prod->codigo_producto . "</td>";
+                    echo "<td><strong>" . $prod->codigo_producto . "</strong></td>";
                     echo "<td>" . $prod->producto . "</td>";
-                    echo "<td class='text-center'>" . $prod->stock_disponible . "</td>";
-                    echo "<td>S/ " . $prod->costo . "</td>";
-                    echo "<td class='text-center'>" . $prod->ganancia . "</td>";
-                    echo "<td>S/ " . $prod->precio . "</td>";
+                    echo "<td class='text-center'>" . $prod->stock . "</td>";
+                    echo "<td>S/ " . $costo_f . "</td>";
+                    echo "<td class='text-center'>" . $ganancia_f . "</td>";
+                    echo "<td class='text-success fw-bold'>S/ " . $precio_f . "</td>";
                     echo "<td>" . $prod->marca . "</td>";
                     echo "<td>" . $prod->categoria . "</td>";
                     echo "</tr>";
                 }
+                echo "</tbody>";
                 echo "</table>";
             } else {
-                echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>";
-                echo "No existen registros.";
-                echo "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>";
+                echo "<div class='alert alert-warning text-center' role='alert'>";
+                echo "<i class='fas fa-exclamation-triangle'></i> No se encontraron productos que coincidan con: <strong>" . htmlspecialchars($valor) . "</strong>";
                 echo "</div>";
             }
-
             $cn = null;
-            
         }
 
         public function RegistrarProducto (Producto $prdoucto){

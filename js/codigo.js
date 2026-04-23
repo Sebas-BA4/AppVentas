@@ -68,4 +68,27 @@ $(function() {
         }
     })
 
-})
+     $("#frm_filtrar_prod #btn_filtrar").on("click", function(e) {
+    e.preventDefault();
+    
+    var valor = $("#txt_valor").val();
+
+    if (valor != "") {
+        // Corregido: Quitamos el ")" que estaba después de la URL
+        $.post("../controller/ctr_filtrar_prod.php", { valor: valor }, function(rpta) {
+            $("#tabla").html(rpta);
+        });
+    } else {
+        $("#tabla").empty(); // Limpiar la tabla si no hay valor
+        alert("Escriba un valor para filtrar...");
+        $("#txt_valor").focus();
+    }
+});
+        
+}) 
+        
+   
+        
+       
+   
+
