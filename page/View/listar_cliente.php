@@ -71,4 +71,8 @@
         <?php include("../includes/pie.php"); ?>
     </div>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> b6dd57ed6046f5de93f60a72ee86b79abf3053ff
