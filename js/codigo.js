@@ -6,6 +6,12 @@ $(function() {
         location.href = "mostrar_producto.php?codprod=" + codprod;
     })
 
+    $(".reg_cliente .btn_mostrar").click(function(e) {
+        let codcli = $(this).closest(".reg_cliente").children(".codcli").text();
+
+        location.href = "mostrar_cliente.php?codcli=" + codcli;
+    })
+
     $(".reg_producto .btn_editar").click(function(e) {
         let codprod = $(this).closest(".reg_producto").children(".codprod").text();
 
